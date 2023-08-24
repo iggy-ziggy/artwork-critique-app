@@ -4,20 +4,31 @@ const withAuth = require('../../utils/auth');
 const path = require('path');
 const firebaseAdmin = require('firebase-admin');
 
-router.post('/', withAuth, async (req, res) => {
+router.post('/api/artwork/upload', withAuth, async (req, res) => {
   try {
     const user_id = req.session.user_id;
 
-    const imageFile = req.files.image; // Assuming you're using a file upload library like 'express-fileupload'
-
     // Initialize Firebase Admin SDK
-    const serviceAccount = require('path/to/your/serviceAccountKey.json');
+    const serviceAccount = {
+      "type": process.env.FIREBASE_TYPE,
+      "project_id": process.env.FIREBASE_PROJECT_ID,
+      "private_key_id": process.env.FIREBASE_PRIVATE_KEY_ID,
+      "private_key": process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+      "client_email": process.env.FIREBASE_CLIENT_EMAIL,
+      "client_id": process.env.FIREBASE_CLIENT_ID,
+      "auth_uri": process.env.FIREBASE_AUTH_URI,
+      "token_uri": process.env.FIREBASE_TOKEN_URI,
+      "auth_provider_x509_cert_url": process.env.FIREBASE_AUTH_PROVIDER_X509_CERT_URL,
+      "client_x509_cert_url": process.env.FIREBASE_CLIENT_X509_CERT_URL,
+    };
+
     firebaseAdmin.initializeApp({
       credential: firebaseAdmin.credential.cert(serviceAccount),
-      storageBucket: FIREBASE_STORAGE_BUCKET, // Replace with your Firebase Storage bucket URL
+      storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
     });
 
     const bucket = firebaseAdmin.storage().bucket();
+    const imageFile = req.files.image;
     const imageFileName = `${Date.now()}_${path.basename(imageFile.name)}`;
     const file = bucket.file(imageFileName);
 
