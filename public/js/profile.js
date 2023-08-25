@@ -1,14 +1,37 @@
 const newFormHandler = async (event) => {
   event.preventDefault();
 
-  const name = document.querySelector('#project-name').value.trim();
-  const needed_funding = document.querySelector('#project-funding').value.trim();
-  const description = document.querySelector('#project-desc').value.trim();
+  const name = document.querySelector('#name').value.trim();
+  const pronouns = document.querySelector('#pronouns').value.trim();
+  const bio = document.querySelector('#bio').value.trim();
+  const media = document.querySelector('#media').value.trim();
+  const profilePicture = document.querySelector('#profile-picture').files[0];
 
-  if (name && needed_funding && description) {
-    const response = await fetch(`/api/projects`, {
+  const profileData = {};
+
+  if (name !== '') {
+    profileData.name = name;
+  }
+  if (pronouns !== '') {
+    profileData.pronouns = pronouns;
+  }
+  if (bio !== '') {
+    profileData.bio = bio;
+  }
+  if (media !== '') {
+    profileData.media = media;
+  }
+  if (profilePicture) {
+    const profilePictureRef = storageRef.child(`profilePictures/${profilePicture.name}`);
+    await profilePictureRef.put(profilePicture);
+    const profilePictureURL = await profilePictureRef.getDownloadURL();
+    profileData.profilePictureURL = profilePictureURL;
+  }
+
+  if (Object.keys(profileData).length > 0) {
+    const response = await fetch(`/api/profile/update`, {
       method: 'POST',
-      body: JSON.stringify({ name, needed_funding, description }),
+      body: JSON.stringify(profileData),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -17,31 +40,12 @@ const newFormHandler = async (event) => {
     if (response.ok) {
       document.location.replace('/profile');
     } else {
-      alert('Failed to create project');
-    }
-  }
-};
-
-const delButtonHandler = async (event) => {
-  if (event.target.hasAttribute('data-id')) {
-    const id = event.target.getAttribute('data-id');
-
-    const response = await fetch(`/api/projects/${id}`, {
-      method: 'DELETE',
-    });
-
-    if (response.ok) {
-      document.location.replace('/profile');
-    } else {
-      alert('Failed to delete project');
+      alert('Failed to update profile');
     }
   }
 };
 
 document
-  .querySelector('.new-project-form')
+  .querySelector('.create-profile-form')
   .addEventListener('submit', newFormHandler);
 
-document
-  .querySelector('.project-list')
-  .addEventListener('click', delButtonHandler);
