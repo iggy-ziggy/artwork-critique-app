@@ -1,8 +1,30 @@
 const router = require('express').Router();
-const { Profile } = require('../../models');
+const { User, Profile } = require('../../models');
 const withAuth = require('../../utils/auth');
 const path = require('path');
 const firebaseAdmin = require('firebase-admin');
+
+router.get('/', async (req, res) => {
+  try {
+    const profileData = await Profile.findAll({
+      include: [{ model: User }],
+    });
+    res.status(200).json(profileData);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+router.get('/:id', async (req, res) => {
+  try {
+    const profileData = await Profile.findByPk(req.params.id, {
+      include: [{ model: User }],
+    });
+    res.status(200).json(profileData);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
 
 router.post('/api/profile/update', withAuth, async (req, res) => {
   try {
