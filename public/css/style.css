@@ -1,5 +1,6 @@
 header, .project:not(:last-child) {
   border-bottom: 1px solid #ccc;
+  background-color: lightgray;
 }
 
 .no-button {
@@ -21,4 +22,10 @@ header, .project:not(:last-child) {
   color: #056605;
   font-weight: bold;
   margin-left: -5px;
+}
+
+.search-bar {
+  border: none;
+  margin-left: 2rem;
+  padding: 0.5rem;
 }
