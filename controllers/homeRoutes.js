@@ -4,8 +4,8 @@ const withAuth = require('../utils/auth');
 
 router.get('/', async (req, res) => {
   try {
-    // Get all projects and JOIN with user data
-    const projectData = await Project.findAll({
+    // Get all artworks and JOIN with user data
+    const artworkData = await Artwork.findAll({
       include: [
         {
           model: User,
@@ -15,12 +15,12 @@ router.get('/', async (req, res) => {
     });
 
     // Serialize data so the template can read it
-    const projects = projectData.map((project) => project.get({ plain: true }));
+    const artworks = artworkData.map((artwork) => artwork.get({ plain: true }));
 
     // Pass serialized data and session flag into template
     res.render('homepage', { 
-      projects, 
-      logged_in: req.session.logged_in 
+      artworks, 
+      logged_in: req.session.logged_in // If the user isn't logged in, they should still see artwork, but will lack the comment functionality - Zach
     });
   } catch (err) {
     res.status(500).json(err);
