@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Profile</title>
+</head>
+<body>
+  <h1>Create Profile</h1>
+  
+  <form class="create-profile-form" action="/api/profile" method="POST">
+    <label for="profile-picture">Profile Picture</label>
+    <input type="file" id="profile-picture" name="profilePicture" accept="image/*">
+
+    <label for="name">Name</label>
+    <input type="text" id="name" name="name">
+    
+    <label for="pronouns">Pronouns</label>
+    <input type="text" id="pronouns" name="pronouns">
+    
+    <label for="bio">Bio</label>
+    <textarea id="bio" name="bio"></textarea>
+    
+    <label for="media">Media</label>
+    <input type="text" id="media" name="media">
+    
+    <button type="submit">Create Profile</button>
+  </form>
+  
+</body>
+</html>
+
+<script src="./js/profile.js"></script>
