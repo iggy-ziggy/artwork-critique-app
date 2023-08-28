@@ -26,7 +26,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// router.post('/api/profile/update', withAuth, async (req, res) => {
+// router.post('/update', withAuth, async (req, res) => {
 //   try {
 //     const user_id = req.session.user_id;
 //     const { name, pronouns, bio, media, profilePictureURL } = req.body;
