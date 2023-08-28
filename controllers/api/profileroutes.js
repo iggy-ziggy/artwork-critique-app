@@ -43,24 +43,21 @@ router.post('/api/profile/update', withAuth, async (req, res) => {
     });
 
     uploadStream.on('error', (error) => {
-      console.error('Error uploading image:', error);
-      res.status(500).json({ message: 'Error uploading image' });
+        console.error('Error uploading image:', error);
+        res.status(500).json({ message: 'Error uploading image', error: error.message });
     });
 
     uploadStream.on('finish', async () => {
-      const imageUrl = `https://storage.googleapis.com/${bucket.name}/${imageFileName}`;
+      const imageUrl = `https://storage.googleapis.com/${bucket.name}/${profilePictureName}`;
 
       const currentDate = new Date(); // Get the current date and time
       
       const updatedProfile = await Profile.updateOne({
-        { user_id},
-        {
-        name: req.body.name,
-        pronouns: req.body.pronouns,
-        bio: req.body.bio,
-        media: req.body.media,
-        profilePictureURL,
-        }
+        name,
+        pronouns,
+        bio,
+        media,
+        profilePictureURL: imageUrl,
       });
 
       res.status(200).json(updatedProfile);
