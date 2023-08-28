@@ -31,7 +31,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// router.post('/api/artwork/upload', withAuth, async (req, res) => {
+// router.post('/upload', withAuth, async (req, res) => {
 //   try {
 //     const user_id = req.session.user_id;
 
