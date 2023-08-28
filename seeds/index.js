@@ -1,31 +1,35 @@
-const seedUsers = require('./user-seeds');
-const seedProfiles = require('./profile-seeds')
-const seedArtwork = require('./artwork-seeds');
-const seedTags = require('./tag-seeds');
-const seedArtworkTags = require('./artwork-tag-seeds');
-
 const sequelize = require('../config/connection');
+const { User, Artwork, Profile, ArtworkTag, Tag } = require('../models');
 
-const seedAll = async () => {
+const userData = require('./userSeeds.json');
+const profileData = require('./profileSeeds.json');
+const artworkData = require('./artworkSeeds.json');
+const artworkTagData = require('./artworkTagSeeds.json');
+const tagData = require('./tagSeeds.json');
+
+const seedDatabase = async () => {
   await sequelize.sync({ force: true });
   console.log('\n----- DATABASE SYNCED -----\n');
-  
-  await seedUsers();
+
+  const users = await User.bulkCreate(userData, {
+    individualHooks: true,
+    returning: true,
+  });
   console.log('\n----- USERS SEEDED -----\n');
 
-  await seedProfiles();
-  console.log('\n----- PROFILES SEEDED -----\n');
-
-  await seedArtwork();
+  const artwork = await Artwork.bulkCreate(artworkData);
   console.log('\n----- ARTWORK SEEDED -----\n');
 
-  await seedTags();
-  console.log('\n----- TAGS SEEDED -----\n');
+  const profiles = await Profile.bulkCreate(profileData);
+  console.log('\n----- PROFILES SEEDED -----\n');
 
-  await seedArtworkTags();
-  console.log('\n----- ARTWORK TAGS SEEDED -----\n');
+  const tag = await Tag.bulkCreate(tagData);
+  console.log('\n----- TAGS SEEDED -----\n');
+  
+  const artworkTag = await ArtworkTag.bulkCreate(artworkTagData);
+  console.log('\n----- ARTWORKTAGS SEEDED -----\n');
 
   process.exit(0);
 };
 
-seedAll();
+seedDatabase();
