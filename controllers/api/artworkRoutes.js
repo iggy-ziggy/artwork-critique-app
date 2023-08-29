@@ -2,7 +2,7 @@ const router = require('express').Router();
 const { Artwork, User, Tag, ArtworkTag } = require('../../models');
 const withAuth = require('../../utils/auth');
 const path = require('path');
-// const firebaseAdmin = require('firebase-admin');
+const firebaseAdmin = require('firebase-admin');
 
 router.get('/', async (req, res) => {
   try {
@@ -33,7 +33,9 @@ router.get('/:id', async (req, res) => {
 
 router.post('/upload', withAuth, async (req, res) => {
   try {
+    console.log('Received upload request');
     const user_id = req.session.user_id;
+    console.log('User ID:', user_id);
 
     // Initialize Firebase Admin SDK
     const serviceAccount = {
@@ -56,6 +58,8 @@ router.post('/upload', withAuth, async (req, res) => {
 
     const bucket = firebaseAdmin.storage().bucket();
     const imageFile = req.files.image;
+    console.log('Image file:', imageFile);
+
     const imageFileName = `${Date.now()}_${path.basename(imageFile.name)}`;
     const file = bucket.file(imageFileName);
 
@@ -71,7 +75,9 @@ router.post('/upload', withAuth, async (req, res) => {
     });
 
     uploadStream.on('finish', async () => {
+      console.log('Upload stream finished');
       const imageUrl = `https://storage.googleapis.com/${bucket.name}/${imageFileName}`;
+      console.log('Image URL:', imageUrl);
 
       const currentDate = new Date(); // Get the current date and time
       
@@ -83,11 +89,14 @@ router.post('/upload', withAuth, async (req, res) => {
         user_id: user_id,
       });
 
+      console.log('New artwork:', newArtwork);
+
       res.status(200).json(newArtwork);
     });
 
     uploadStream.end(imageFile.data);
   } catch (err) {
+    console.error('Error in upload route:', err);
     res.status(400).json(err);
   }
 });
