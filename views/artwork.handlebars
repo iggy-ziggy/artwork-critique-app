@@ -1,0 +1,22 @@
+<div class="row mb-4 project">
+  <div class="col-md-5">
+    <h2>
+      <p>{{artwork.name}}</p>
+    </h2>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" alt="placeholder">
+    <p>Created by {{artwork.user.name}}</p>
+  </div>
+  <div class="col-md-7">
+    <p>
+      {{artwork.description}}
+    </p>
+  </div>
+  <div>
+    <h4>Critiques</h4>
+
+    <label for="commentBox">Add your critique</label>
+    <textarea id="commentBox" name="commentBox" placeholder="hit me with your best shot..."></textarea>
+
+    <button type="submit">submit</button>
+  </div>
+</div>
