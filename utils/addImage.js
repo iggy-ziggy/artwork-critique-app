@@ -1,7 +1,6 @@
-const firebase = require('../db/db');  // reference to our db 
-const firestore = firebase.firestore(); // if using firestore
+const firebaseStorage = require('../config/firebase');  // reference to our db 
 require("firebase/storage"); // must be required for this to work
-const storage = firebase.storage().ref(); // create a reference to storage
+const storage = firebaseStorage.storage().ref(); // create a reference to storage
 global.XMLHttpRequest = require("xhr2"); // must be used to avoid bug
 // Add Image to Storage and return the file path
 const addImage = async (req, res) => {
