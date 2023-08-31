@@ -1,29 +1,11 @@
 const router = require('express').Router();
+const multer = require('multer');
 const { User, Profile } = require('../../models');
 const withAuth = require('../../utils/auth');
 const path = require('path');
-const firebaseAdmin = require('firebase-admin'); // Import Firebase Admin SDK
-
-// Initialize Firebase Admin SDK
-const serviceAccount = {
-  "type": process.env.FIREBASE_TYPE,
-  "project_id": process.env.FIREBASE_PROJECT_ID,
-  "private_key_id": process.env.FIREBASE_PRIVATE_KEY_ID,
-  "private_key": process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
-  "client_email": process.env.FIREBASE_CLIENT_EMAIL,
-  "client_id": process.env.FIREBASE_CLIENT_ID,
-  "auth_uri": process.env.FIREBASE_AUTH_URI,
-  "token_uri": process.env.FIREBASE_TOKEN_URI,
-  "auth_provider_x509_cert_url": process.env.FIREBASE_AUTH_PROVIDER_X509_CERT_URL,
-  "client_x509_cert_url": process.env.FIREBASE_CLIENT_X509_CERT_URL,
-};
-
-firebaseAdmin.initializeApp({
-  credential: firebaseAdmin.credential.cert(serviceAccount),
-  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-});
-
-const bucket = firebaseAdmin.storage().bucket();
+const { addImage } = require('../addImage');
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage }).single('file');
 
 router.get('/', async (req, res) => {
   try {
@@ -47,29 +29,17 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.post('/update', withAuth, async (req, res) => {
+router.post('/update', withAuth, upload, async (req, res) => {
   try {
+    console.log('Received Update request');
     const user_id = req.session.user_id;
+    console.log('User ID:', user_id);
+
     const { name, pronouns, bio, media } = req.body;
 
     if (req.file) {
-      const profilePicture = req.file;
-      const profilePictureName = `${user_id}_${profilePicture.originalname}`;
-      const file = bucket.file(`profilePictures/${profilePictureName}`);
-
-      const uploadStream = file.createWriteStream({
-        metadata: {
-          contentType: profilePicture.mimetype,
-        },
-      });
-
-      uploadStream.on('error', (error) => {
-        console.error('Error uploading image:', error);
-        res.status(500).json({ message: 'Error uploading image' });
-      });
-
-      uploadStream.on('finish', async () => {
-        const imageUrl = `https://storage.googleapis.com/${bucket.name}/${profilePictureName}`;
+        const imageUrl = await addImage(req, res);
+        console.log('Profile Picture URL', imageUrl);
 
         try {
           const updatedProfileData = {
@@ -97,9 +67,6 @@ router.post('/update', withAuth, async (req, res) => {
           console.error('Error updating profile:', updateError);
           res.status(500).json({ message: 'Error updating profile' });
         }
-      });
-
-      uploadStream.end(profilePicture.data);
     } else {
       try {
         const updatedProfileData = {
@@ -136,7 +103,7 @@ router.post('/update', withAuth, async (req, res) => {
         console.error('Error updating profile:', updateError);
         res.status(500).json({ message: 'Error updating profile' });
       }
-    }
+    }  
   } catch (err) {
     console.error('Error:', err);
     res.status(400).json(err);
