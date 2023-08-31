@@ -1,7 +1,6 @@
 // Requiring firebase (as our db)
 require('dotenv').config();
 const firebase = require('firebase');
-const firebase = require('firebase');
 
 
 const firebaseConfig = {
