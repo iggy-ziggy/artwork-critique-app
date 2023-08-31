@@ -1,0 +1,17 @@
+<!-- Loop over each object in the artworks array -->
+{{#each artworks as |artwork| }}
+<div class="row mb-4 project">
+  <div class="col-md-5">
+    <h2>
+      <a href="/api/artwork/{{id}}">{{title}}</a>
+    </h2>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" alt="placeholder">
+    <a href="/api/profiles/{{user.id}}">Created by {{user.name}}</a>
+  </div>
+  <div class="col-md-7">
+    <p>
+      {{description}}
+    </p>
+  </div>
+</div>
+{{/each}}
