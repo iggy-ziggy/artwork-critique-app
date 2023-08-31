@@ -7,6 +7,7 @@ const { addImage } = require('../addImage');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage }).single('file');
 
+// get all profiles
 router.get('/', async (req, res) => {
   try {
     const profileData = await Profile.findAll({
@@ -18,6 +19,7 @@ router.get('/', async (req, res) => {
   }
 });
 
+// get one profile
 router.get('/:id', async (req, res) => {
   try {
     const profileData = await Profile.findByPk(req.params.id, {
@@ -29,6 +31,17 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// render profile
+router.get('/', async (req, res) => {
+  res.render('profile');
+});
+
+//render update profile form
+router.get('/create/new', async (req, res) => {
+  res.render('updateprofile');
+});
+
+// create profile
 router.post('/update', withAuth, upload, async (req, res) => {
   try {
     console.log('Received Update request');
@@ -107,6 +120,21 @@ router.post('/update', withAuth, upload, async (req, res) => {
   } catch (err) {
     console.error('Error:', err);
     res.status(400).json(err);
+  }
+});
+
+// get and render profile
+router.get('/:id', async (req, res) => {
+  try {
+    const profileData = await Profile.findByPk(req.params.id, {
+      include: [{ model: User }],
+    });
+    const profile = profileData.get({ plain: true });
+    res.render('profile', {
+      ...profile,
+    });
+  } catch (err) {
+    res.status(500).json(err);
   }
 });
 
