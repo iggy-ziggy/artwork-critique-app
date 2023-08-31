@@ -3,7 +3,7 @@ const multer = require('multer');
 const { User, Profile } = require('../../models');
 const withAuth = require('../../utils/auth');
 const path = require('path');
-const { addImage } = require('../addImage');
+const { addImage } = require('../../utils/addImage');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage }).single('file');
 
