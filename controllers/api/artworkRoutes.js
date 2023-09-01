@@ -8,12 +8,12 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage }).single('file');
 
 // render upload form
-router.get('/upload', async (req, res) => {
+router.get('/upload', withAuth, async (req, res) => {
   res.render('upload');
 });
 
 // get all artwork
-router.get('/', async (req, res) => {
+router.get('/', withAuth, async (req, res) => {
   try {
     const artworkData = await Artwork.findAll({
       include: [{ model: User }, { model: Tag }],
@@ -25,7 +25,7 @@ router.get('/', async (req, res) => {
 });
 
 // get one artwork
-router.get('/:id', async (req, res) => {
+router.get('/:id', withAuth, async (req, res) => {
   try {
     const artworkData = await Artwork.findByPk(req.params.id, 
       {
