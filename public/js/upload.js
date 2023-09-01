@@ -11,7 +11,7 @@ document.getElementById('upload-form').addEventListener('submit', async (event) 
     formData.append('image', imageFile);
   
     try {
-      const response = await fetch('/api/artworks/upload', {
+      const response = await fetch('/api/artwork/upload', {
         method: 'POST',
         body: formData,
       });

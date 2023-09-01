@@ -8,7 +8,8 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage }).single('file');
 
 // get all profiles
-// router.get('/', async (req, res) => {
+
+// router.get('/findall', async (req, res) => {
 //   try {
 //     const profileData = await Profile.findAll({
 //       include: [{ model: User }],
@@ -19,8 +20,8 @@ const upload = multer({ storage: storage }).single('file');
 //   }
 // });
 
-// get one profile
-// router.get('/:id', async (req, res) => {
+// // get one profile
+// router.get('/:id', withAuth, async (req, res) => {
 //   try {
 //     const profileData = await Profile.findByPk(req.params.id, {
 //       include: [{ model: User }],
@@ -31,17 +32,49 @@ const upload = multer({ storage: storage }).single('file');
 //   }
 // });
 
-// render profile
-router.get('/', async (req, res) => {
-  res.render('profile');
+// get and render profile of another user
+router.get('/:id', withAuth, async (req, res) => {
+  try {
+    const profileData = await Profile.findByPk(req.params.id, {
+      include: [{ model: User }],
+    });
+    const profile = profileData.get({ plain: true });
+    res.render('profile', {
+      ...profile,
+    });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// render current user profile
+// Use withAuth middleware to prevent access to route
+router.get('/', withAuth, async (req, res) => {
+  try {
+    // Find the logged in user based on the session ID
+    const userData = await User.findByPk(req.session.user_id, {
+      attributes: { exclude: ['password'] },
+      include: [{ model: Profile, Artwork }],
+    });
+
+    const user = userData.get({ plain: true });
+
+    res.render('profile', {
+      ...user,
+      logged_in: true
+    });
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
 //render update profile form
-router.get('/update', async (req, res) => {
+
+router.get('/update', withAuth, async (req, res) => {
   res.render('updateprofile');
 });
 
-// create profile
+// update profile
 router.post('/update', withAuth, upload, async (req, res) => {
   try {
     console.log('Received Update request');
@@ -60,7 +93,7 @@ router.post('/update', withAuth, upload, async (req, res) => {
             pronouns: pronouns || undefined,
             bio: bio || undefined,
             media: media || undefined,
-            profilePictureURL: imageUrl,
+            image_url: imageUrl,
           };
 
           const options = {
@@ -120,21 +153,6 @@ router.post('/update', withAuth, upload, async (req, res) => {
   } catch (err) {
     console.error('Error:', err);
     res.status(400).json(err);
-  }
-});
-
-// get and render profile
-router.get('/:id', async (req, res) => {
-  try {
-    const profileData = await Profile.findByPk(req.params.id, {
-      include: [{ model: User }],
-    });
-    const profile = profileData.get({ plain: true });
-    res.render('profile', {
-      ...profile,
-    });
-  } catch (err) {
-    res.status(500).json(err);
   }
 });
 

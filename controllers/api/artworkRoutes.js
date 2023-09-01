@@ -7,39 +7,39 @@ const { addImage } = require('../../utils/addImage');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage }).single('file');
 
-// render upload form
-router.get('/upload', async (req, res) => {
-  res.render('upload');
+// get all artwork
+router.get('/', withAuth, async (req, res) => {
+  try {
+    const artworkData = await Artwork.findAll({
+      include: [{ model: User }, { model: Tag }],
+    });
+    res.status(200).json(artworkData);
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
-// get all artwork
-// router.get('/', async (req, res) => {
-//   try {
-//     const artworkData = await Artwork.findAll({
-//       include: [{ model: User }, { model: Tag }],
-//     });
-//     res.status(200).json(artworkData);
-//   } catch (err) {
-//     res.status(500).json(err);
-//   }
-// });
-
 // get one artwork
-// router.get('/:id', async (req, res) => {
-//   try {
-//     const artworkData = await Artwork.findByPk(req.params.id, 
-//       {
-//         include: [{ model: User }, { model: Tag }],
-//       });
-//       if (!artworkData) {
-//         res.status(404).json({ message: 'No artwork with that id!'});
-//         return;
-//       }
-//       res.status(200).json(artworkData);
-//   } catch (err) {
-//     res.status(500).json(err);
-//   }
-// });
+router.get('/:id', withAuth, async (req, res) => {
+  try {
+    const artworkData = await Artwork.findByPk(req.params.id, 
+      {
+        include: [{ model: User }, { model: Tag }],
+      });
+      if (!artworkData) {
+        res.status(404).json({ message: 'No artwork with that id!'});
+        return;
+      }
+      res.status(200).json(artworkData);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// render upload form
+router.get('/upload', withAuth, async (req, res) => {
+  res.render('upload');
+});
 
 // create new artwork
 router.post('/upload', withAuth, upload, async (req, res) => {
@@ -56,7 +56,7 @@ router.post('/upload', withAuth, upload, async (req, res) => {
     const newArtwork = await Artwork.create({
       name: req.body.name,
       description: req.body.description,
-      imageUrl: imageUrl,
+      image_url: imageUrl,
       date_created: currentDate,
       user_id: user_id,
     });
@@ -109,7 +109,7 @@ router.get('/:id', async (req, res) => {
       return;
     }
 
-    const artwork = artworkData.get(({ plain: true }));
+    const artwork = artworkData.get({ plain: true });
 
     res.render('artwork', { 
       artwork, 
