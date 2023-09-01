@@ -60,7 +60,7 @@ router.post('/update', withAuth, upload, async (req, res) => {
             pronouns: pronouns || undefined,
             bio: bio || undefined,
             media: media || undefined,
-            profilePictureURL: imageUrl,
+            image_url: imageUrl,
           };
 
           const options = {

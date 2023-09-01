@@ -56,7 +56,7 @@ router.post('/upload', withAuth, upload, async (req, res) => {
     const newArtwork = await Artwork.create({
       name: req.body.name,
       description: req.body.description,
-      imageUrl: imageUrl,
+      image_url: imageUrl,
       date_created: currentDate,
       user_id: user_id,
     });
