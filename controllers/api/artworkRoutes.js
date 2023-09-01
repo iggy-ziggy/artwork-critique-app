@@ -7,34 +7,6 @@ const { addImage } = require('../../utils/addImage');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage }).single('file');
 
-// get all artwork
-router.get('/', withAuth, async (req, res) => {
-  try {
-    const artworkData = await Artwork.findAll({
-      include: [{ model: User }, { model: Tag }],
-    });
-    res.status(200).json(artworkData);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
-// get one artwork
-router.get('/:id', withAuth, async (req, res) => {
-  try {
-    const artworkData = await Artwork.findByPk(req.params.id, 
-      {
-        include: [{ model: User }, { model: Tag }],
-      });
-      if (!artworkData) {
-        res.status(404).json({ message: 'No artwork with that id!'});
-        return;
-      }
-      res.status(200).json(artworkData);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
 
 // render upload form
 router.get('/upload', withAuth, async (req, res) => {
@@ -100,7 +72,7 @@ router.get('/:id', async (req, res) => {
       include: [
         {
           model: User,
-          attributes: ['name'],
+          // attributes: ['name'],
         },
       ],
     });

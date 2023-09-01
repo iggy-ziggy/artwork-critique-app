@@ -1,42 +1,18 @@
 const router = require('express').Router();
 const multer = require('multer');
-const { User, Profile } = require('../../models');
+const { User, Profile, Artwork } = require('../../models');
 const withAuth = require('../../utils/auth');
 const path = require('path');
 const { addImage } = require('../../utils/addImage');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage }).single('file');
 
-// get all profiles
-
-// router.get('/findall', async (req, res) => {
-//   try {
-//     const profileData = await Profile.findAll({
-//       include: [{ model: User }],
-//     });
-//     res.status(200).json(profileData);
-//   } catch (err) {
-//     res.status(500).json(err);
-//   }
-// });
-
-// // get one profile
-// router.get('/:id', withAuth, async (req, res) => {
-//   try {
-//     const profileData = await Profile.findByPk(req.params.id, {
-//       include: [{ model: User }],
-//     });
-//     res.status(200).json(profileData);
-//   } catch (err) {
-//     res.status(500).json(err);
-//   }
-// });
 
 // get and render profile of another user
 router.get('/:id', withAuth, async (req, res) => {
   try {
-    const profileData = await Profile.findByPk(req.params.id, {
-      include: [{ model: User }],
+    const profileData = await User.findByPk(req.params.id, {
+      include: [{ model: Profile }, { model: Artwork}],
     });
     const profile = profileData.get({ plain: true });
     res.render('profile', {
@@ -54,7 +30,7 @@ router.get('/', withAuth, async (req, res) => {
     // Find the logged in user based on the session ID
     const userData = await User.findByPk(req.session.user_id, {
       attributes: { exclude: ['password'] },
-      include: [{ model: Profile, Artwork }],
+      include: [{ model: Profile }, { model: Artwork}],
     });
 
     const user = userData.get({ plain: true });
@@ -69,8 +45,8 @@ router.get('/', withAuth, async (req, res) => {
 });
 
 //render update profile form
-
-router.get('/update', withAuth, async (req, res) => {
+// I keep getting sequelizeloadingerror whenever this doesn't have an additional endpoint - for now, let's leave it like this - it's only rendering, shouldn't cause problems
+router.get('/update/new', withAuth, async (req, res) => {
   res.render('updateprofile');
 });
 

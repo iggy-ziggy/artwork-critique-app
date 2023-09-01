@@ -1,10 +1,10 @@
 <div class="row mb-4 project">
   <div class="col-md-5">
     <h2>
-      <p>{{artwork.name}}</p>
+      <p>{{artwork.title}}</p>
     </h2>
     <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" alt="placeholder">
-    <p>Created by {{artwork.user.name}}</p>
+    <p>Created by <a href="/api/profile/{{artwork.user.id}}">{{artwork.user.name}}</a></p>
   </div>
   <div class="col-md-7">
     <p>
@@ -20,3 +20,5 @@
     <button type="submit">submit</button>
   </div>
 </div>
+
+{{!-- script goes here --}}

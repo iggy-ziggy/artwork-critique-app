@@ -6,7 +6,7 @@
       <a href="/api/artwork/{{id}}">{{title}}</a>
     </h2>
     <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" alt="placeholder">
-    <a href="/api/profiles/{{user.id}}">Created by {{user.name}}</a>
+    <a href="/api/profile/{{id}}">Created by {{user.name}}</a>
   </div>
   <div class="col-md-7">
     <p>
@@ -15,3 +15,5 @@
   </div>
 </div>
 {{/each}}
+
+{{!-- if we write js for this, put the script tag here --}}

@@ -20,7 +20,8 @@
         <nav>
           <!-- Conditionally render login or logout links -->
           {{#if logged_in}}
-          <a href="/profile" class="no-button">profile</a> |
+          <a href="/api/artwork" class="no-button">main gallery</a> |
+          <a href="/api/profile" class="no-button">profile</a> |
           <button class="no-button" id="logout">logout</button>
           {{else}}
           <a class="no-button" href="/login">login</a>
