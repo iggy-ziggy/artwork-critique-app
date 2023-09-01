@@ -7,11 +7,6 @@ const { addImage } = require('../../utils/addImage');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage }).single('file');
 
-// render upload form
-router.get('/upload', withAuth, async (req, res) => {
-  res.render('upload');
-});
-
 // get all artwork
 router.get('/', withAuth, async (req, res) => {
   try {
@@ -39,6 +34,11 @@ router.get('/:id', withAuth, async (req, res) => {
   } catch (err) {
     res.status(500).json(err);
   }
+});
+
+// render upload form
+router.get('/upload', withAuth, async (req, res) => {
+  res.render('upload');
 });
 
 // create new artwork

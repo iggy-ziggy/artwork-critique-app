@@ -8,6 +8,7 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage }).single('file');
 
 // get all profiles
+
 // router.get('/findall', async (req, res) => {
 //   try {
 //     const profileData = await Profile.findAll({
@@ -30,7 +31,6 @@ const upload = multer({ storage: storage }).single('file');
 //     res.status(500).json(err);
 //   }
 // });
-
 
 // get and render profile of another user
 router.get('/:id', withAuth, async (req, res) => {
@@ -69,6 +69,7 @@ router.get('/', withAuth, async (req, res) => {
 });
 
 //render update profile form
+
 router.get('/update', withAuth, async (req, res) => {
   res.render('updateprofile');
 });
