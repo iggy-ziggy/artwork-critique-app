@@ -21,6 +21,9 @@ Artwork.init(
     media: {
       type: DataTypes.STRING,
     },
+    image_url: {
+      type: DataTypes.STRING,
+    },
     user_id: {
       type: DataTypes.INTEGER,
       references: {
