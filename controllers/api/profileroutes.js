@@ -8,28 +8,28 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage }).single('file');
 
 // get all profiles
-router.get('/', async (req, res) => {
-  try {
-    const profileData = await Profile.findAll({
-      include: [{ model: User }],
-    });
-    res.status(200).json(profileData);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
+// router.get('/', async (req, res) => {
+//   try {
+//     const profileData = await Profile.findAll({
+//       include: [{ model: User }],
+//     });
+//     res.status(200).json(profileData);
+//   } catch (err) {
+//     res.status(500).json(err);
+//   }
+// });
 
 // get one profile
-router.get('/:id', async (req, res) => {
-  try {
-    const profileData = await Profile.findByPk(req.params.id, {
-      include: [{ model: User }],
-    });
-    res.status(200).json(profileData);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
+// router.get('/:id', async (req, res) => {
+//   try {
+//     const profileData = await Profile.findByPk(req.params.id, {
+//       include: [{ model: User }],
+//     });
+//     res.status(200).json(profileData);
+//   } catch (err) {
+//     res.status(500).json(err);
+//   }
+// });
 
 // render profile
 router.get('/', async (req, res) => {
@@ -37,7 +37,7 @@ router.get('/', async (req, res) => {
 });
 
 //render update profile form
-router.get('/create/new', async (req, res) => {
+router.get('/update', async (req, res) => {
   res.render('updateprofile');
 });
 
