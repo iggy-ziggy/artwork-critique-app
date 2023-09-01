@@ -109,7 +109,7 @@ router.get('/:id', async (req, res) => {
       return;
     }
 
-    const artwork = artworkData.get(({ plain: true }));
+    const artwork = artworkData.get({ plain: true });
 
     res.render('artwork', { 
       artwork, 
