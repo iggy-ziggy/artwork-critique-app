@@ -1,14 +1,14 @@
 document.getElementById('upload-form').addEventListener('submit', async (event) => {
     event.preventDefault();
   
-    const name = document.getElementById('name').value;
+    const name = document.getElementById('title').value;
     const description = document.getElementById('description').value;
-    const imageFile = document.getElementById('image').files[0];
+    const imageFile = document.getElementById('artwork-picture').files[0];
   
     const formData = new FormData();
-    formData.append('name', name);
+    formData.append('title', title);
     formData.append('description', description);
-    formData.append('image', imageFile);
+    formData.append('artworkPicture', imageFile);
   
     try {
       const response = await fetch('/api/artwork/upload', {

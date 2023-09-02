@@ -7,34 +7,21 @@ const newFormHandler = async (event) => {
   const media = document.querySelector('#media').value.trim();
   const profilePicture = document.querySelector('#profile-picture').files[0];
 
-  const profileData = {};
+  const formData = new FormData();
 
-  if (name !== '') {
-    profileData.name = name;
-  }
-  if (pronouns !== '') {
-    profileData.pronouns = pronouns;
-  }
-  if (bio !== '') {
-    profileData.bio = bio;
-  }
-  if (media !== '') {
-    profileData.media = media;
-  }
+  formData.append('name', name);
+  formData.append('pronouns', pronouns);
+  formData.append('bio', bio);
+  formData.append('media', media);
+
   if (profilePicture) {
-    const profilePictureRef = storageRef.child(`profilePictures/${profilePicture.name}`);
-    await profilePictureRef.put(profilePicture);
-    const profilePictureURL = await profilePictureRef.getDownloadURL();
-    profileData.profilePictureURL = profilePictureURL;
+    formData.append('profilePicture', profilePicture); // Append the profile picture to FormData
   }
 
-  if (Object.keys(profileData).length > 0) {
-    const response = await fetch(`/api/profile/update`, {
+  if (formData.has('name') || formData.has('pronouns') || formData.has('bio') || formData.has('media') || formData.has('profilePicture')) {
+    const response = await fetch('/api/profile/update', {
       method: 'POST',
-      body: JSON.stringify(profileData),
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      body: formData, // Use FormData for file upload
     });
 
     if (response.ok) {
@@ -45,7 +32,4 @@ const newFormHandler = async (event) => {
   }
 };
 
-document
-  .querySelector('.create-profile-form')
-  .addEventListener('submit', newFormHandler);
-
+document.querySelector('.create-profile-form').addEventListener('submit', newFormHandler);
