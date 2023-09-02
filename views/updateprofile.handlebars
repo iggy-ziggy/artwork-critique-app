@@ -1,22 +1,32 @@
-<h1>Create Profile</h1>
+<h1>Update Profile</h1>
+
+<form class="update-profile-form" enctype="multipart/form-data" action="/api/profile/update" method="POST">
+  <!-- Profile Picture: Display current image if it exists -->
+  <label for="profile-picture">Profile Picture</label>
+  <input type="file" id="profile-picture" name="profilePicture" accept="image/*">
   
-  <form class="create-profile-form" action="/api/profile/update" method="POST">
-    <label for="profile-picture">Profile Picture</label>
-    <input type="file" id="profile-picture" name="profilePicture" accept="image/*">
+  {{#if profile.image_url}}
+    <!-- Display the current profile picture if available -->
+    <img src="{{profile.image_url}}" alt="Current Profile Picture">
+  {{/if}}
 
-    <label for="name">Name</label>
-    <input type="text" id="name" name="name">
-    
-    <label for="pronouns">Pronouns</label>
-    <input type="text" id="pronouns" name="pronouns">
-    
-    <label for="bio">Bio</label>
-    <textarea id="bio" name="bio"></textarea>
-    
-    <label for="media">Media</label>
-    <input type="text" id="media" name="media">
-    
-    <button type="submit">Create Profile</button>
-  </form>
+  <!-- Name: Display current name if it exists, otherwise use a placeholder -->
+  <label for="name">Name</label>
+  <input type="text" id="name" name="name" value="{{#if profile.name}}{{profile.name}}{{/if}}">
+  
+  <!-- Pronouns: Display current pronouns if they exist, otherwise use a placeholder -->
+  <label for="pronouns">Pronouns</label>
+  <input type="text" id="pronouns" name="pronouns" value="{{#if profile.pronouns}}{{profile.pronouns}}{{/if}}">
+  
+  <!-- Bio: Display current bio if it exists, otherwise use a placeholder -->
+  <label for="bio">Bio</label>
+  <textarea id="bio" name="bio">{{#if profile.bio}}{{profile.bio}}{{/if}}</textarea>
+  
+  <!-- Media: Display current media if it exists, otherwise use a placeholder -->
+  <label for="media">Media</label>
+  <input type="text" id="media" name="media" value="{{#if profile.media}}{{profile.media}}{{/if}}">
+  
+  <button type="submit">Update Profile</button>
+</form>
 
-<script src="./js/profile.js"></script>
+<script src="/js/profile.js"></script>

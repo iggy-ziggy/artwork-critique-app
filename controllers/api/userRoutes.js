@@ -7,13 +7,16 @@ router.post('/', async (req, res) => {
   try {
     const userData = await User.create(req.body);
 
+    console.log('New user created:', userData);
+
     req.session.save(() => {
       req.session.user_id = userData.id;
       req.session.logged_in = true;
-
+      
       res.status(200).json(userData);
     });
   } catch (err) {
+    console.error('Error creating new user:', err);
     res.status(400).json(err);
   }
 });

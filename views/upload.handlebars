@@ -1,14 +1,14 @@
 <form id="upload-form" enctype="multipart/form-data" action="/api/artwork/upload" method="POST">
-  <label for="name">Artwork Name</label>
-  <input type="text" id="name" name="name" required>
+  <label for="name">Artwork Title</label>
+  <input type="text" id="title" name="title" required>
 
   <label for="description">Description</label>
   <textarea id="description" name="description" required></textarea>
 
-  <label for="image">Upload Image</label>
-  <input type="file" id="image" name="image" accept="image/*" required>
+  <label for="artwork-picture">Upload Image</label>
+  <input type="file" id="artwork-picture" name="artworkPicture" accept="image/*" required>
 
   <button type="submit">Upload</button>
 </form>
 
-<script src="./js/upload.js"></script>
+<script src="/js/upload.js"></script>

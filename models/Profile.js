@@ -19,7 +19,7 @@ Profile.init(
       type: DataTypes.STRING,
     },
     bio: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
     },
     media: {
       type: DataTypes.STRING,

@@ -14,8 +14,17 @@ const loginFormHandler = async (event) => {
     });
 
     if (response.ok) {
-      // If successful, redirect the browser to the profile page
+      // Redirect the browser to the profile page
       document.location.replace('/api/profile');
+
+      // Fetch user data after redirecting to the profile page
+      const userDataResponse = await fetch('/api/profile');
+      if (userDataResponse.ok) {
+        const userData = await userDataResponse.json();
+        console.log('User Data:', userData);
+      } else {
+        console.error('Failed to fetch user data');
+      }
     } else {
       alert(response.statusText);
     }
@@ -38,10 +47,18 @@ const signupFormHandler = async (event) => {
 
     if (response.ok) {
       document.location.replace('/api/profile');
-    } else {
-      alert(response.statusText);
-    }
-  }
+     // Fetch user data after redirecting to the profile page
+     const userDataResponse = await fetch('/api/profile');
+     if (userDataResponse.ok) {
+       const userData = await userDataResponse.json();
+       console.log('User Data:', userData);
+     } else {
+       console.error('Failed to fetch user data');
+     }
+   } else {
+     alert(response.statusText);
+   }
+ }
 };
 
 document.querySelector('.login-form').addEventListener('submit', loginFormHandler);
