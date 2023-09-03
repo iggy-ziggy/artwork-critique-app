@@ -64,17 +64,30 @@ router.post('/upload', withAuth, upload.single('artworkPicture'), async (req, re
 });
 
 // add comment to artwork
-router.post('/comment', withAuth, async (req, res) => {
+router.post('/:id/comment', withAuth, async (req, res) => {
   try {
-    const newComment = await Comment.create(
-      {
-        text: req.body,
-      },
-    )
+    const newComment = await Comment.create({
+      text: req.body.text,
+      // ...req.body,
+      user_id: req.session.user_id,
+      artwork_id: req.params.id,
+    });
     res.status(200).json(newComment);
   } catch (err) {
     res.status(500).json(err);
   } 
+});
+
+// for insomnia route testing only
+router.get('/comment', async (req, res) => {
+  try {
+    const commentData = await Comment.findAll({
+      include: [{ model: User }],
+    });
+    res.status(200).json(commentData);
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
   // get and render all artwork
@@ -111,7 +124,12 @@ router.get('/:id', async (req, res) => {
         },
         {
           model: Comment,
-        }
+          include: [
+            {
+              model: User,
+            }
+          ]
+        },
       ],
     });
     if (!artworkData) {
