@@ -16,13 +16,18 @@
     </p>
   </div>
   <div>
-    <h4>Critiques</h4>
-
-    <label for="commentBox">Add your critique</label>
-    <textarea id="commentBox" name="commentBox" placeholder="hit me with your best shot..."></textarea>
-
-    <button type="submit">submit</button>
+    <form id="comment-form" action="/api/artwork/comment" method="POST">
+      <label for="comment-box">Add your critique</label>
+      <textarea id="comment-box" name="comment-box" placeholder="hit me with your best shot..."></textarea>
+      <button type="submit">submit</button>
+    </form>
+    <div>
+      <h4>Critiques</h4>
+      {{#each comment }}
+        <p>{{comment.text}}</p>
+      {{/each}}
+    </div>
   </div>
 </div>
 
-{{!-- script goes here --}}
+<script src="/js/comment.js"></script>

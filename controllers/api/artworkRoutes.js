@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const multer = require('multer');
-const { Artwork, User, ArtworkTag } = require('../../models');
+const { Artwork, User, Comment, ArtworkTag } = require('../../models');
 const withAuth = require('../../utils/auth');
 const path = require('path');
 const { addImage } = require('../../utils/addImage');
@@ -63,6 +63,20 @@ router.post('/upload', withAuth, upload.single('artworkPicture'), async (req, re
   }
 });
 
+// add comment to artwork
+router.post('/comment', withAuth, async (req, res) => {
+  try {
+    const newComment = await Comment.create(
+      {
+        text: req.body,
+      },
+    )
+    res.status(200).json(newComment);
+  } catch (err) {
+    res.status(500).json(err);
+  } 
+});
+
   // get and render all artwork
 router.get('/', async (req, res) => {
   try {
@@ -95,6 +109,9 @@ router.get('/:id', async (req, res) => {
           model: User,
           // attributes: ['name'],
         },
+        {
+          model: Comment,
+        }
       ],
     });
     if (!artworkData) {
@@ -112,5 +129,7 @@ router.get('/:id', async (req, res) => {
     res.status(500).json(err);
   }
 });
+
+
   
   module.exports = router;
