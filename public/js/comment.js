@@ -4,14 +4,14 @@ const commentFormHandler = async (event) => {
   const comment = document.querySelector('#comment-box').value.trim();
 
   if (comment) {
-    const response = await fetch('api/artwork/comment', {
+    const response = await fetch('api/artwork/:id/comment', {
       method: 'POST',
       body: JSON.stringify(comment),
       headers: { 'Content-Type': 'application/json' },
     });
 
     if (response.ok) {
-      document.location.reload;
+      document.location.reload();
     }
   }
 };
