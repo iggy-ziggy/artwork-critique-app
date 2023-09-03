@@ -1,9 +1,10 @@
 const sequelize = require('../config/connection');
-const { User, Artwork, Profile, ArtworkTag, Tag } = require('../models');
+const { User, Artwork, Comment, Profile, ArtworkTag, Tag } = require('../models');
 
 const userData = require('./userSeeds.json');
 const profileData = require('./profileSeeds.json');
 const artworkData = require('./artworkSeeds.json');
+const commentData = require('./commentSeeds.json');
 const artworkTagData = require('./artworkTagSeeds.json');
 const tagData = require('./tagSeeds.json');
 
@@ -19,6 +20,9 @@ const seedDatabase = async () => {
 
   const artwork = await Artwork.bulkCreate(artworkData);
   console.log('\n----- ARTWORK SEEDED -----\n');
+
+  const comments = await Comment.bulkCreate(commentData);
+  console.log('\n----- COMMENTS SEEDED -----\n');
 
   const profiles = await Profile.bulkCreate(profileData);
   console.log('\n----- PROFILES SEEDED -----\n');

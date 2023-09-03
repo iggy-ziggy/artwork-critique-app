@@ -1,7 +1,7 @@
 const commentFormHandler = async (event) => {
   event.preventDefault();
 
-  const comment = document.querySelector('#comment').value.trim();
+  const comment = document.querySelector('#comment-box').value.trim();
 
   if (comment) {
     const response = await fetch('api/artwork/comment', {
