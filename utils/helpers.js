@@ -19,4 +19,7 @@ module.exports = {
       return `<span for="img" aria-label="gear">⚙️</span>`;
     }
   },
+    gt: function (a, b) {
+      return a > b;
+  },
 };

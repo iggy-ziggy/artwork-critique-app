@@ -30,6 +30,21 @@ Comment.init(
             key: 'id',
         }
     },
+    heart_eyes_count: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 1, // Initial count is zero
+    },
+    trash_can_count: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 1, // Initial count is zero
+    },
+    date_created: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
   },
   {
     sequelize,

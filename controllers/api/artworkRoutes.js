@@ -54,7 +54,6 @@ router.post('/upload', withAuth, upload.single('artworkPicture'), async (req, re
 
       res.status(200).json(newArtwork);
     } else {
-      // Handle the case when there is no artworkPicture
       res.status(400).json({ message: 'No artwork picture provided' });
     }
   } catch (err) {
@@ -64,28 +63,16 @@ router.post('/upload', withAuth, upload.single('artworkPicture'), async (req, re
 });
 
 // add comment to artwork
-router.post('/:id/comment', withAuth, async (req, res) => {
+router.post('/comment', withAuth, async (req, res) => {
   try {
-    const newComment = await Comment.create({
-      text: req.body.text,
-      // ...req.body,
-      user_id: req.session.user_id,
-      artwork_id: req.params.id,
-    });
+    const newComment = await Comment.create(
+      {
+        text: req.body,
+      },
+    )
     res.status(200).json(newComment);
   } catch (err) {
-    res.status(500).json(err);
-  } 
-});
-
-// for insomnia route testing only
-router.get('/comment', async (req, res) => {
-  try {
-    const commentData = await Comment.findAll({
-      include: [{ model: User }],
-    });
-    res.status(200).json(commentData);
-  } catch (err) {
+    console.error('Error in comment route:', err);
     res.status(500).json(err);
   }
 });
@@ -113,37 +100,43 @@ router.get('/', async (req, res) => {
   }
 });
 
-// get and render single artwork page
-router.get('/:id', async (req, res) => {
+router.get('/:artwork_id', async (req, res) => {
   try {
-    const artworkData = await Artwork.findByPk(req.params.id, {
+    const artwork_id = req.params.artwork_id;
+
+    // Fetch the artwork details
+    const artworkData = await Artwork.findByPk(artwork_id, {
       include: [
         {
           model: User,
-          // attributes: ['name'],
         },
         {
           model: Comment,
-          include: [
-            {
-              model: User,
-            }
-          ]
-        },
+        }
       ],
     });
+
     if (!artworkData) {
-      res.status(404).json({ message: 'No artwork with that id!'});
+      res.status(404).json({ message: 'No artwork with that id!' });
       return;
     }
 
     const artwork = artworkData.get({ plain: true });
 
-    res.render('artwork', { 
-      artwork, 
-      logged_in: req.session.logged_in 
+    // Fetch the comments associated with the artwork
+    const comments = await Comment.findAll({
+      where: { artwork_id: artwork_id },
+      raw: true,
+    });
+    
+    // Render the Handlebars template with the artwork and comments data
+    res.render('artwork', {
+      artwork,
+      comments, // Pass the comments to the template
+      logged_in: req.session.logged_in,
     });
   } catch (err) {
+    console.error('Error in /artwork/:artwork_id route:', err);
     res.status(500).json(err);
   }
 });

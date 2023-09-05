@@ -5,11 +5,12 @@ class Artwork extends Model {}
 
 Artwork.init(
   {
-    id: {
+    artwork_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
       autoIncrement: true,
+      field:'id',
     },
     title: {
       type: DataTypes.STRING,
@@ -30,6 +31,16 @@ Artwork.init(
         model: 'user',
         key: 'id',
       }
+    },
+    heart_eyes_count: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 1, // Initial count is zero
+    },
+    trash_can_count: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 1, // Initial count is zero
     },
   },
   {
