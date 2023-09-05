@@ -1,19 +1,13 @@
-<!-- Loop over each object in the artworks array -->
-{{#each artworks as |artwork| }}
-<div class="row mb-4 project">
-  <div class="col-md-5">
-    <h2>
-      <a href="/api/artwork/{{artwork_id}}">{{title}}</a>
-    </h2>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" alt="placeholder">
-    <a href="/api/profile/{{id}}">Created by {{user.name}}</a>
-  </div>
-  <div class="col-md-7">
-    <p>
-      {{description}}
-    </p>
+<div class="row mb-4 surface">
+  <h1>All Artworks</h1>
+  <hr>
+  <div class="card-columns">
+    {{#each artworks as |artwork| }}
+    <a href="/api/artork/{{id}}" class="card-container">
+      <img src="{{image_url}}" alt="artwork" class="img-card">
+      <div class="card-title">{{title}}</div>
+      <div class="card-author">{{user.name}}</div>
+    </a>
+    {{/each}}
   </div>
 </div>
-{{/each}}
-
-{{!-- if we write js for this, put the script tag here --}}
