@@ -24,7 +24,7 @@
     <hr>
     <div class="card-columns">
         {{#each artworks as |artwork| }}
-        <a href="/api/artwork/{{id}}" class="card-container">
+        <a href="/api/artwork/{{artwork_id}}" class="card-container">
             {{#if image_url}}
             <img src="{{image_url}}" alt="artwork thumbnail" class="img-card">
             {{else}}
