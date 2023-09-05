@@ -49,7 +49,7 @@ router.get('/search/:result', async (req, res) => {
     const results = resultData.map((artwork) => artwork.get({ plain: true }));
 
     console.log(results);
-    res.status(200).json(results);
+    // res.status(200).json(results);
     res.render('results-page', { results });
   } catch (err) {
     console.error('Error:', err);
