@@ -56,6 +56,7 @@
         <p>Comment by <a href="/api/profile/{{comment.user.id}}">{{comment.user.name}}</a> on {{format_date comment.date_created}}</p>
       </div>
     </div>
+    {{/each}}
     {{else}}
     <p>No Critiques at this time. Tell me what you think!</p>
     {{/if}}
