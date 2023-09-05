@@ -1,0 +1,20 @@
+<h1>Upload Artwork</h1>
+<hr>
+<form class="row surface" id="upload-form" enctype="multipart/form-data" action="/api/artwork/upload" method="POST">
+  <div class="flex-column d-flex align-items-center">
+    <label for="artwork-picture">Upload Image</label>
+    <input class="form-control-custom" type="file" id="artwork-picture" name="artworkPicture" accept="image/*" required
+      onchange="loadFile(event)">
+    <img id="output" class="upload-img">
+  </div>
+
+  <label for="title">Artwork Title</label>
+  <input class="form-textbox" type="text" id="title" name="title" required>
+
+  <label for="description">Description</label>
+  <textarea class="form-textbox" id="description" name="description" required></textarea>
+
+  <button type="submit" class="custom_button">Upload</button>
+</form>
+
+<script src="./js/upload.js"></script>

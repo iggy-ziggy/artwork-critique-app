@@ -1,0 +1,36 @@
+{{#if logged_in}}
+<div class="row mb-4 surface">
+    <h1>Following</h1>
+    <hr>
+    <div class="card-columns">
+        <a href="/" class="card-container">
+            <img src="https://picsum.photos/id/237/300/200" alt="placeholder image" class="img-card">
+            <div class="card-title">placeholder1</div>
+            <div class="card-author">Billy Joe</div>
+        </a>
+
+    </div>
+</div>
+{{else}}
+<div class="row mb-4 surface">
+    <div class="center_grid">
+        <h3>You don't seem to be logged in! Log in or sign up here:</h3>
+        <a href="/login"><button class="custom_button"> Login </button></a>
+    </div>
+</div>
+{{/if}}
+<div class="row mb-4 surface">
+    <h1>Most Recent</h1>
+    <hr>
+    <div class="card-columns">
+        {{#each artworks as |artwork| }}
+        <a href="/api/artwork/{{artwork_id}}" class="card-container">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541" alt="recently posted artwork" class="img-card">
+            <div class="card-title">{{title}}</div>
+            <div class="card-author">{{user.name}}</div>
+        </a>
+        {{/each}}
+    </div>
+</div>
+
+{{!-- if we write js for this, put script here --}}

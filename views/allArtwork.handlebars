@@ -1,0 +1,13 @@
+<div class="row mb-4 surface">
+  <h1>All Artworks</h1>
+  <hr>
+  <div class="card-columns">
+    {{#each artworks as |artwork| }}
+    <a href="/api/artwork/{{artwork_id}}" class="card-container">
+      <img src="{{image_url}}" alt="artwork" class="img-card">
+      <div class="card-title">{{title}}</div>
+      <div class="card-author">{{user.name}}</div>
+    </a>
+    {{/each}}
+  </div>
+</div>

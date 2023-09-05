@@ -1,0 +1,78 @@
+<div class="row mb-4 surface">
+    <div class="text-center">
+        {{#if profile.image_url}}
+        <img src="{{profile.image_url}}" alt="profile-image" width="200" height="200" class="pfp">
+        {{else}}
+        <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
+            id="profile-placeholder" alt="placeholder-image" width="200" height="200" class="pfp">
+        {{/if}}
+        <h3>{{name}}</h3>
+        <p class="text-white-50">{{profile.pronouns}}</p>
+    </div>
+
+    <div class="color_bg p-2">
+        <p>"{{profile.bio}}"</p>
+        <p>Preferred media: {{profile.media}}</p>
+    </div>
+
+    <a href="/api/profile/update/new"><button class="custom_button float-end">Edit Profile</button></a>
+</div>
+
+<div class="row mb-4 surface">
+    <h3>Gallery</h3>
+
+    <hr>
+    <div class="card-columns">
+        {{#each artworks as |artwork| }}
+        <a href="/api/artwork/{{artwork_id}}" class="card-container">
+            {{#if image_url}}
+            <img src="{{image_url}}" alt="artwork thumbnail" class="img-card">
+            {{else}}
+            <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
+                alt="artwork placeholder" class="img-card">
+            {{/if}}
+            <div class="card-title">{{title}}</div>
+        </a>
+        {{/each}}
+    </div>
+    <a href="/api/artwork/upload"><button class="custom_button float-end">Upload Artwork</button></a>
+</div>
+
+<div class="surface row mb-4">
+    <div>
+        <h5>Followers</h5>
+        <div class="follower d-flex flex-wrap justify-content-around">
+            {{#each followers as |follower|}}
+            <a class="text-center no-button" href="/api/profile/{{follower.id}}">
+                {{#if follower.profile.image_url}}
+                <img src="{{follower.profile.image_url}}" alt="{{follower.profile.name}}'s profile image" width="100"
+                    height="100">
+                {{else}}
+                <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
+                    alt="placeholder-image" width="100" height="100">
+                {{/if}}
+                <p>{{follower.profile.name}}</p>
+            </a>
+            {{/each}}
+        </div>
+    </div>
+
+    <div>
+        <h5>Following</h5>
+
+        <div class="following d-flex flex-wrap justify-content-around">
+            {{#each following as |followedUser|}}
+            <a class="text-center no-button" href="/api/profile/{{followedUser.id}}">
+                {{#if followedUser.profile.image_url}}
+                <img src="{{followedUser.profile.image_url}}" alt="{{followedUser.profile.name}}'s profile image"
+                    width="100" height="100">
+                {{else}}
+                <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
+                    alt="placeholder-image" width="100" height="100">
+                {{/if}}
+                <p>{{followedUser.profile.name}}</p>
+            </a>
+            {{/each}}
+        </div>
+    </div>
+</div>
