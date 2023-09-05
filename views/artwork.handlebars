@@ -21,7 +21,7 @@
     <h3 class="header-cen-underline mt-2">Critiques</h3>
     <form class="row" id="comment-form" action="/api/artwork/{{artwork.id}}/comment" method="POST">
       <label for="comment-box">Add your critique</label>
-      <div class="emoji-container text-end">
+      <div class="emoji-container text-end" id="artwork-container">
         <button class="emoji heart-eyes" data-emoji-type="heart_eyes" data-target-type="artwork"
           data-target-id="{{artwork.artwork_id}}">❤️</button>
         <span class="emoji-count"
