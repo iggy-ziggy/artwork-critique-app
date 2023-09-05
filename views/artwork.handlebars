@@ -1,52 +1,65 @@
-{{log this}} <!-- Log the entire context object -->
-<div class="row mb-4" id="artwork-container">
-  <div class="col-md-5">
-    {{#if artwork.image_url}}
-      <img src="{{artwork.image_url}}" alt="artwork thumbnail">
-    {{else}}
-      <a href="/api/artwork/{{artwork.id}}">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" id="profile-placeholder" alt="placeholder-image" width="100" height="100">
-      </a>
-    {{/if}}
-    <p>Created by <a href="/api/profile/{{artwork.user.id}}">{{artwork.user.name}}</a></p>
+{{log this}}
+<div class="row mb-4 project p-2 align-items-center flex-column">
+  <div class="col-md-5 d-flex flex-column align-items-center">
+    <h2 class="header-cen">
+      <p>{{artwork.title}}</p>
+    </h2>
+    <a href="/api/artwork/{{artwork.id}}">
+      <img src="{{artwork.image_url}}" alt="artwork thumbnail" class="artwork-img">
+    </a>
 
-    <button class="emoji heart-eyes" data-emoji-type="heart_eyes" data-target-type="artwork" data-target-id="{{artwork.artwork_id}}">❤️</button>
-    <span class="emoji-count" id="emoji-count-artwork-{{artwork.artwork_id}}-heart_eyes">{{artwork.heart_eyes_count}}</span>
-    <button class="emoji trash_can" data-emoji-type="trash_can" data-target-type="artwork" data-target-id="{{artwork.artwork_id}}">🗑️</button>
-    <span class="emoji-count" id="emoji-count-artwork-{{artwork.artwork_id}}-trash_can">{{artwork.trash_can_count}}</span>
+    <p>Created by <a href="/api/profile/{{artwork.user.id}}" class="no-button">{{artwork.user.name}}</a>
+    </p>
   </div>
-  <div class="col-md-7">
-    <p>{{artwork.description}}</p>
+  <div class="col-md-7 color_bg p-2">
+    <h3 class="header">
+      Description:
+    </h3>
+    <p class="text-center">
+      {{artwork.description}}
+    </p>
   </div>
-</div>
-
-<div class="row mb-4">
-  <div class="col-md-12">
-    <form id="comment-form" action="/api/artwork/{{artwork.id}}/comment" method="POST">
+  <div>
+    <h3 class="header-cen-underline mt-2">Critiques</h3>
+    <form class="row" id="comment-form" action="/api/artwork/{{artwork.id}}/comment" method="POST">
       <label for="comment-box">Add your critique</label>
-      <textarea id="comment-box" name="text" placeholder="Write your comment here..." required></textarea>
-      <button type="submit">Submit Comment</button>
+      <div class="emoji-container text-end">
+        <button class="emoji heart-eyes" data-emoji-type="heart_eyes" data-target-type="artwork"
+          data-target-id="{{artwork.artwork_id}}">❤️</button>
+        <span class="emoji-count"
+          id="emoji-count-artwork-{{artwork.artwork_id}}-heart_eyes">{{artwork.heart_eyes_count}}</span>
+        <button class="emoji trash_can" data-emoji-type="trash_can" data-target-type="artwork"
+          data-target-id="{{artwork.artwork_id}}">🗑️</button>
+        <span class="emoji-count"
+          id="emoji-count-artwork-{{artwork.artwork_id}}-trash_can">{{artwork.trash_can_count}}</span>
+      </div>
+      <div class="row">
+        <textarea class="form-textbox" id="comment-box" name="text" placeholder="Write your comment here..."
+          required></textarea>
+        <button class="custom_button" type="submit">Submit Critique</button>
+      </div>
     </form>
   </div>
-</div>
-
-<div id="comment-container">
-  <h4>Critiques</h4>
-  {{#if comments.length}}
+  <div id="comment-container">
+    <h4>Critiques</h4>
+    {{#if comments.length}}
     {{#each comments as |comment|}}
-      <div class="comment">
-        <p>{{comment.text}}</p>
-        <!-- Display Comment emoji counts -->
-        <button class="emoji heart-eyes" data-emoji-type="heart_eyes" data-target-type="comment" data-target-id="{{comment.id}}">❤️</button>
+    <div class="comment">
+      <p>{{comment.text}}</p>
+      <!-- Display Comment emoji counts -->
+      <div class="emoji-container">
+        <button class="emoji heart-eyes" data-emoji-type="heart_eyes" data-target-type="comment"
+          data-target-id="{{comment.id}}">❤️</button>
         <span class="emoji-count" id="emoji-count-comment-{{comment.id}}-heart_eyes">{{comment.heart_eyes_count}}</span>
-        <button class="emoji trash_can" data-emoji-type="trash_can" data-target-type="comment" data-target-id="{{comment.id}}">🗑️</button>
+        <button class="emoji trash_can" data-emoji-type="trash_can" data-target-type="comment"
+          data-target-id="{{comment.id}}">🗑️</button>
         <span class="emoji-count" id="emoji-count-comment-{{comment.id}}-trash_can">{{comment.trash_can_count}}</span>
       </div>
+    </div>
     {{/each}}
-    <button id="show-all-comments">Show All Comments</button>
-  {{else}}
+    {{else}}
     <p>No Critiques at this time. Tell me what you think!</p>
-  {{/if}}
+    {{/if}}
+  </div>
 </div>
-
 <script src="/js/comment.js"></script>
