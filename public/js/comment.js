@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
     console.error('Invalid artwork_id:', artwork_id);
   }
 
-
   // Handle emoji click events
   async function handleEmojiClick(event, targetType, targetId, emojiType) {
     if (event.target.classList.contains('emoji')) {
@@ -33,7 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             body: JSON.stringify(emojiData)
           });
-  
           if (response.ok) {
             // Update the displayed emoji count on the page
             updateEmojiCount(targetType, targetId, emojiType);
