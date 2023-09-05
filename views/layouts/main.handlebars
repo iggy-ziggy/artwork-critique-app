@@ -27,7 +27,9 @@
           <a class="no-button" href="/login">login</a>
           {{/if}}
         </nav>
-        <input type="text" class="search-bar" placeholder="Search for users, tags, etc...">
+        <form action="/search/:result" class="search-form" method="get">
+          <input type="text" id="search-bar" placeholder="Search for users, tags, etc...">
+        </form>
       </div>
 
     </header>
@@ -39,6 +41,7 @@
   </div>
   {{#if logged_in}}
   <script src="/js/logout.js"></script>
+  <script src="/js/search.js"></script>
   {{/if}}
   </main>
   <footer>

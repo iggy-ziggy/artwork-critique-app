@@ -25,6 +25,10 @@ Artwork.init(
     image_url: {
       type: DataTypes.STRING,
     },
+    date_created: {
+      type: DataTypes.DATE, 
+      defaultValue: DataTypes.NOW,
+    },
     user_id: {
       type: DataTypes.INTEGER,
       references: {
@@ -35,12 +39,12 @@ Artwork.init(
     heart_eyes_count: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 1, // Initial count is zero
+      defaultValue: 1,
     },
     trash_can_count: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 1, // Initial count is zero
+      defaultValue: 1
     },
   },
   {

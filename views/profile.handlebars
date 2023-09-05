@@ -28,11 +28,30 @@
     {{/if}}
 </div>
 {{/each}}
-{{!-- {{#each as ||}}
 <div>
-    <h5>Following</h5>
-    <img src="" alt="">
-    {{user.name}}
-    <p>This will be a list of people this user is following</p>
+  <h5>Followers</h5>
+  {{#each followers as |follower|}}
+    <div class="follower">
+      {{#if follower.profile.image_url}}
+        <img src="{{follower.profile.image_url}}" alt="{{follower.profile.name}}'s profile image">
+      {{else}}
+        <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" alt="placeholder-image" width="100" height="100">
+      {{/if}}
+      <p><a href="/api/profile/{{follower.id}}">{{follower.profile.name}}</a></p>
+    </div>
+  {{/each}}
 </div>
-{{/each}} --}}
+
+<div>
+  <h5>Following</h5>
+  {{#each following as |followedUser|}}
+    <div class="following">
+      {{#if followedUser.profile.image_url}}
+        <img src="{{followedUser.profile.image_url}}" alt="{{followedUser.profile.name}}'s profile image">
+      {{else}}
+        <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" alt="placeholder-image" width="100" height="100">
+      {{/if}}
+      <p><a href="/api/profile/{{followedUser.id}}">{{followedUser.profile.name}}</a></p>
+    </div>
+  {{/each}}
+</div>

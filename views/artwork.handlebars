@@ -8,7 +8,7 @@
         <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" id="profile-placeholder" alt="placeholder-image" width="100" height="100">
       </a>
     {{/if}}
-    <p>Created by <a href="/api/profile/{{artwork.user.id}}">{{artwork.user.name}}</a></p>
+    <p>Uploaded by <a href="/api/profile/{{artwork.user.id}}">{{artwork.user.name}}</a> on {{format_date artwork.date_created}}</p>
 
     <button class="emoji heart-eyes" data-emoji-type="heart_eyes" data-target-type="artwork" data-target-id="{{artwork.artwork_id}}">❤️</button>
     <span class="emoji-count" id="emoji-count-artwork-{{artwork.artwork_id}}-heart_eyes">{{artwork.heart_eyes_count}}</span>
@@ -34,6 +34,7 @@
   <h4>Critiques</h4>
   {{#if comments.length}}
     {{#each comments as |comment|}}
+    {{log this}}
       <div class="comment">
         <p>{{comment.text}}</p>
         <!-- Display Comment emoji counts -->
@@ -41,9 +42,9 @@
         <span class="emoji-count" id="emoji-count-comment-{{comment.id}}-heart_eyes">{{comment.heart_eyes_count}}</span>
         <button class="emoji trash_can" data-emoji-type="trash_can" data-target-type="comment" data-target-id="{{comment.id}}">🗑️</button>
         <span class="emoji-count" id="emoji-count-comment-{{comment.id}}-trash_can">{{comment.trash_can_count}}</span>
+        <p>Comment by <a href="/api/profile/{{comment.user.id}}">{{comment.user.name}}</a> on {{format_date comment.date_created}}</p>
       </div>
     {{/each}}
-    <button id="show-all-comments">Show All Comments</button>
   {{else}}
     <p>No Critiques at this time. Tell me what you think!</p>
   {{/if}}
