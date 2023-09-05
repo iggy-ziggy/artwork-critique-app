@@ -54,7 +54,6 @@ router.post('/upload', withAuth, upload.single('artworkPicture'), async (req, re
 
       res.status(200).json(newArtwork);
     } else {
-      // Handle the case when there is no artworkPicture
       res.status(400).json({ message: 'No artwork picture provided' });
     }
   } catch (err) {
@@ -63,18 +62,132 @@ router.post('/upload', withAuth, upload.single('artworkPicture'), async (req, re
   }
 });
 
-// add comment to artwork
-router.post('/comment', withAuth, async (req, res) => {
+router.get('/:artwork_id/comment', withAuth, async (req, res) => {
   try {
-    const newComment = await Comment.create(
-      {
-        text: req.body,
-      },
-    )
-    res.status(200).json(newComment);
+    const artwork_id = req.params.artwork_id;
+    console.log('Received artwork ID:', artwork_id);
+    const comments = await Comment.findAll({ where: { artwork_id: artwork_id } });
+    console.log('Sending response'); 
+    res.json(comments);
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+router.post('/:artwork_id/comment', withAuth, async (req, res) => {
+  try {
+    const { text } = req.body;
+    const artwork_id = req.params.artwork_id;
+    const user_id = req.session.user_id;
+
+    const newComment = await Comment.create({ // Use Comment model
+      text,
+      user_id: user_id,
+      artwork_id: artwork_id,
+      date_created: new Date(),
+    });
+
+    // Redirect back to the artwork page after adding the comment
+    res.redirect(`/api/artwork/${artwork_id}`);
   } catch (err) {
+    console.error('Error in comment route:', err);
     res.status(500).json(err);
-  } 
+  }
+});
+
+router.post('/update-emoji', withAuth, async (req, res) => {
+  try {
+    const { emojiType, targetType, targetId } = req.body;
+    console.log('Received request with payload:', req.body); 
+
+    let updatedCount;
+
+    if (targetType === 'comment') {
+      // Handle emoji update for comments
+      if (emojiType === 'heart_eyes') {
+        // Update the heart-eyes count for the comment
+        const updatedComment = await Comment.increment('heart_eyes_count', {
+          where: { id: targetId },
+        });
+        console.log('Updated comment:', updatedComment);
+        updatedCount = updatedComment[0]['heart_eyes_count']; // Access attribute directly
+      } else if (emojiType === 'trash_can') {
+        // Update the trash-can count for the comment
+        const updatedComment = await Comment.increment('trash_can_count', {
+          where: { id: targetId },
+        });
+        updatedCount = updatedComment[0]['trash_can_count']; // Access attribute directly
+      } else {
+        // Handle invalid emojiType for comments
+        res.status(400).json({ success: false, message: 'Invalid emoji type' });
+        return;
+      }
+    } else if (targetType === 'artwork') {
+      // Handle emoji update for artwork
+      if (emojiType === 'heart_eyes') {
+        // Update the heart-eyes count for the artwork
+        const updatedArtwork = await Artwork.increment('heart_eyes_count', {
+          where: { id: targetId },
+        });
+        console.log('Updated artwork:', updatedArtwork);
+        updatedCount = updatedArtwork[0]['heart_eyes_count']; // Access attribute directly
+      } else if (emojiType === 'trash_can') {
+        // Update the trash-can count for the artwork
+        const updatedArtwork = await Artwork.increment('trash_can_count', {
+          where: { id: targetId },
+        });
+        updatedCount = updatedArtwork[0]['trash_can_count']; // Access attribute directly
+      } else {
+        // Handle invalid emojiType for artwork
+        res.status(400).json({ success: false, message: 'Invalid emoji type' });
+        return;
+      }
+    } else {
+      // Handle invalid targetType here
+      res.status(400).json({ success: false, message: 'Invalid target type' });
+      return;
+    }
+
+    if (updatedCount !== undefined) {
+      // The attribute exists, you can proceed
+      console.log('Updated count:', updatedCount); 
+      res.json({ success: true, newCount: updatedCount });
+    } else {
+      // Handle the case where the attribute is undefined
+      res.status(500).json({ success: false, message: 'Attribute not found' });
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ success: false, message: 'Internal Server Error' });
+  }
+});
+
+router.get('/:artwork_id/emojis', withAuth, async (req, res) => {
+  try {
+    const artworkId = req.params.artwork_id;
+
+    // Query the Artwork model to find the artwork by its ID
+    const artwork = await Artwork.findByPk(artworkId);
+
+    if (!artwork) {
+      // Handle the case where the artwork is not found
+      return res.status(404).json({ message: 'Artwork not found' });
+    }
+
+    // Extract the emoji counts from the artwork object
+    const emojis = {
+      heart_eyes: artwork.heart_eyes_count,
+      trash_can: artwork.trash_can_count,
+      // Add more emoji counts as needed
+    };
+
+    // Send the emojis as a JSON response
+    res.json({ emojis });
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
 });
 
   // get and render all artwork
@@ -100,32 +213,40 @@ router.get('/', async (req, res) => {
   }
 });
 
-// get and render single artwork page
-router.get('/:id', async (req, res) => {
+router.get('/:artwork_id', async (req, res) => {
   try {
-    const artworkData = await Artwork.findByPk(req.params.id, {
+    const artwork_id = req.params.artwork_id;
+
+    // Fetch the artwork details
+    const artworkData = await Artwork.findByPk(artwork_id, {
       include: [
         {
           model: User,
-          // attributes: ['name'],
         },
-        {
-          model: Comment,
-        }
       ],
     });
+
     if (!artworkData) {
-      res.status(404).json({ message: 'No artwork with that id!'});
+      res.status(404).json({ message: 'No artwork with that id!' });
       return;
     }
 
     const artwork = artworkData.get({ plain: true });
 
-    res.render('artwork', { 
-      artwork, 
-      logged_in: req.session.logged_in 
+    // Fetch the comments associated with the artwork
+    const comments = await Comment.findAll({
+      where: { artwork_id: artwork_id },
+      raw: true,
+    });
+    
+    // Render the Handlebars template with the artwork and comments data
+    res.render('artwork', {
+      artwork,
+      comments, // Pass the comments to the template
+      logged_in: req.session.logged_in,
     });
   } catch (err) {
+    console.error('Error in /artwork/:artwork_id route:', err);
     res.status(500).json(err);
   }
 });
