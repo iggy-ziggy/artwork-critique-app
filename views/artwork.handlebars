@@ -6,10 +6,8 @@
     </h2>
     <a href="/api/artwork/{{artwork.id}}">
       <img src="{{artwork.image_url}}" alt="artwork thumbnail" class="artwork-img">
+      <p>Uploaded by <a href="/api/profile/{{artwork.user.id}}">{{artwork.user.name}}</a> on {{format_date artwork.date_created}}</p>
     </a>
-
-    <p>Created by <a href="/api/profile/{{artwork.user.id}}" class="no-button">{{artwork.user.name}}</a>
-    </p>
   </div>
   <div class="col-md-7 color_bg p-2">
     <h3 class="header">
@@ -44,6 +42,7 @@
     <h4>Critiques</h4>
     {{#if comments.length}}
     {{#each comments as |comment|}}
+
     <div class="comment">
       <p>{{comment.text}}</p>
       <!-- Display Comment emoji counts -->
@@ -54,9 +53,9 @@
         <button class="emoji trash_can" data-emoji-type="trash_can" data-target-type="comment"
           data-target-id="{{comment.id}}">🗑️</button>
         <span class="emoji-count" id="emoji-count-comment-{{comment.id}}-trash_can">{{comment.trash_can_count}}</span>
+        <p>Comment by <a href="/api/profile/{{comment.user.id}}">{{comment.user.name}}</a> on {{format_date comment.date_created}}</p>
       </div>
     </div>
-    {{/each}}
     {{else}}
     <p>No Critiques at this time. Tell me what you think!</p>
     {{/if}}

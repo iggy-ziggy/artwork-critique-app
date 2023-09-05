@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const multer = require('multer');
-const { Artwork, User, Comment, ArtworkTag } = require('../../models');
+const { Artwork, User, Comment, UserFollow, ArtworkTag } = require('../../models');
 const withAuth = require('../../utils/auth');
 const path = require('path');
 const { addImage } = require('../../utils/addImage');
@@ -99,9 +99,9 @@ router.post('/:artwork_id/comment', withAuth, async (req, res) => {
 router.post('/update-emoji', withAuth, async (req, res) => {
   try {
     const { emojiType, targetType, targetId } = req.body;
-    console.log('Received request with payload:', req.body); 
+    console.log('Received request with payload:', req.body);
 
-    let updatedCount;
+    let updatedCounts = {};
 
     if (targetType === 'comment') {
       // Handle emoji update for comments
@@ -111,13 +111,19 @@ router.post('/update-emoji', withAuth, async (req, res) => {
           where: { id: targetId },
         });
         console.log('Updated comment:', updatedComment);
-        updatedCount = updatedComment[0]['heart_eyes_count']; // Access attribute directly
+        updatedCounts = {
+          heart_eyes: updatedComment[0]['heart_eyes_count'],
+          trash_can: 0, // Initialize trash_can count for comments (you can update it similarly)
+        };
       } else if (emojiType === 'trash_can') {
         // Update the trash-can count for the comment
         const updatedComment = await Comment.increment('trash_can_count', {
           where: { id: targetId },
         });
-        updatedCount = updatedComment[0]['trash_can_count']; // Access attribute directly
+        updatedCounts = {
+          heart_eyes: 0, // Initialize heart_eyes count for comments (you can update it similarly)
+          trash_can: updatedComment[0]['trash_can_count'],
+        };
       } else {
         // Handle invalid emojiType for comments
         res.status(400).json({ success: false, message: 'Invalid emoji type' });
@@ -131,13 +137,19 @@ router.post('/update-emoji', withAuth, async (req, res) => {
           where: { id: targetId },
         });
         console.log('Updated artwork:', updatedArtwork);
-        updatedCount = updatedArtwork[0]['heart_eyes_count']; // Access attribute directly
+        updatedCounts = {
+          heart_eyes: updatedArtwork[0]['heart_eyes_count'],
+          trash_can: 0, // Initialize trash_can count for artwork (you can update it similarly)
+        };
       } else if (emojiType === 'trash_can') {
         // Update the trash-can count for the artwork
         const updatedArtwork = await Artwork.increment('trash_can_count', {
           where: { id: targetId },
         });
-        updatedCount = updatedArtwork[0]['trash_can_count']; // Access attribute directly
+        updatedCounts = {
+          heart_eyes: 0, // Initialize heart_eyes count for artwork (you can update it similarly)
+          trash_can: updatedArtwork[0]['trash_can_count'],
+        };
       } else {
         // Handle invalid emojiType for artwork
         res.status(400).json({ success: false, message: 'Invalid emoji type' });
@@ -149,13 +161,13 @@ router.post('/update-emoji', withAuth, async (req, res) => {
       return;
     }
 
-    if (updatedCount !== undefined) {
-      // The attribute exists, you can proceed
-      console.log('Updated count:', updatedCount); 
-      res.json({ success: true, newCount: updatedCount });
+    if (Object.keys(updatedCounts).length > 0) {
+      // Counts have been updated, you can proceed
+      console.log('Updated counts:', updatedCounts);
+      res.json({ success: true, counts: updatedCounts, targetId });
     } else {
-      // Handle the case where the attribute is undefined
-      res.status(500).json({ success: false, message: 'Attribute not found' });
+      // Handle the case where the counts are not updated
+      res.status(500).json({ success: false, message: 'Counts not updated' });
     }
   } catch (error) {
     console.error('Error:', error);
@@ -167,7 +179,6 @@ router.get('/:artwork_id/emojis', withAuth, async (req, res) => {
   try {
     const artworkId = req.params.artwork_id;
 
-    // Query the Artwork model to find the artwork by its ID
     const artwork = await Artwork.findByPk(artworkId);
 
     if (!artwork) {
@@ -179,7 +190,6 @@ router.get('/:artwork_id/emojis', withAuth, async (req, res) => {
     const emojis = {
       heart_eyes: artwork.heart_eyes_count,
       trash_can: artwork.trash_can_count,
-      // Add more emoji counts as needed
     };
 
     // Send the emojis as a JSON response
@@ -221,7 +231,7 @@ router.get('/:artwork_id', async (req, res) => {
     const artworkData = await Artwork.findByPk(artwork_id, {
       include: [
         {
-          model: User,
+          model: User, 
         },
       ],
     });
@@ -233,16 +243,16 @@ router.get('/:artwork_id', async (req, res) => {
 
     const artwork = artworkData.get({ plain: true });
 
-    // Fetch the comments associated with the artwork
-    const comments = await Comment.findAll({
+    // Fetch the comments associated with the artwork, including user information
+    const commentData = await Comment.findAll({
       where: { artwork_id: artwork_id },
-      raw: true,
+      include: [{ model: User }],
     });
-    
+    const comments = commentData.map((comment) => comment.get({ plain: true }));
     // Render the Handlebars template with the artwork and comments data
     res.render('artwork', {
       artwork,
-      comments, // Pass the comments to the template
+      comments,
       logged_in: req.session.logged_in,
     });
   } catch (err) {

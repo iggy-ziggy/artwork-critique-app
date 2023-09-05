@@ -5,6 +5,7 @@ const Comment = require('./Comment');
 const Tag = require('./Tag');
 const ArtworkTag = require('./ArtworkTag');
 const Profile = require('./Profile');
+const UserFollow = require('./UserFollow');
 
 
 Artwork.belongsTo(User, {
@@ -48,6 +49,18 @@ Profile.belongsTo(User, {
 
 User.hasOne(Profile, {
   foreignKey: 'user_id',
+});
+
+User.belongsToMany(User, {
+  through: UserFollow,
+  as: 'follows',
+  foreignKey: 'following_id',
+});
+
+User.belongsToMany(User, {
+  through: UserFollow,
+  as: 'following',
+  foreignKey: 'follower_id',
 });
 
 module.exports = {
