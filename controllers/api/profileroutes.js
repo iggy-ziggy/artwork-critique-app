@@ -124,6 +124,7 @@ router.post('/update', withAuth, upload.single('profilePicture'), async (req, re
       const newProfile = await Profile.create(newProfileData);
 
       // Return a success response
+      res.render('profile');
       return res.status(200).json({ message: 'Profile created successfully', profile: newProfile, downloadURL: imageUrl });
     }
 
@@ -146,6 +147,7 @@ router.post('/update', withAuth, upload.single('profilePicture'), async (req, re
 
     if (affectedRows > 0) {
       // Return a success response
+      res.render('profile');
       return res.status(200).json({ message: 'Profile updated successfully', downloadURL: imageUrl });
     } else {
       return res.status(404).json({ message: 'Profile not found' });
