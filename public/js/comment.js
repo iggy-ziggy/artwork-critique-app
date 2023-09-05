@@ -12,38 +12,38 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('artwork_id:', artwork_id);
   } else {
     console.error('Invalid artwork_id:', artwork_id);
-  }
+}
 
-  // Handle emoji click events
-  async function handleEmojiClick(event, targetType, targetId, emojiType) {
-    if (event.target.classList.contains('emoji')) {
-      if (emojiType && targetType && targetId) {
-        try {
-          const emojiData = {
-            emojiType,
-            targetType,
+// Handle emoji click events
+async function handleEmojiClick(event, targetType, targetId, emojiType) {
+  if (event.target.classList.contains('emoji')) {
+    if (emojiType && targetType && targetId) {
+      try {
+        const emojiData = {
+          emojiType,
+          targetType,
             targetId
-          };
-          // Send a request to update the emoji count on the server
-          const response = await fetch('/api/artwork/update-emoji', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
+        };
+        // Send a request to update the emoji count on the server
+        const response = await fetch('/api/artwork/update-emoji', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
             body: JSON.stringify(emojiData)
-          });
-          if (response.ok) {
-            // Update the displayed emoji count on the page
+        });
+        if (response.ok) {
+          // Update the displayed emoji count on the page
             updateEmojiCount(targetType, targetId, emojiType);
-          } else {
-            console.error('Failed to update emoji count');
-          }
-        } catch (error) {
-          console.error('Error:', error); // Log other errors
+        } else {
+          console.error('Failed to update emoji count');
         }
+      } catch (error) {
+        console.error('Error:', error); // Log other errors
       }
     }
   }
+}
 
   // Add an event listener for both artwork and comment emoji button clicks
   commentContainer.addEventListener('click', (event) => {
