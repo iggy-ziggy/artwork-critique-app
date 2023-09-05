@@ -32,7 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             body: JSON.stringify(emojiData)
           });
-  
           if (response.ok) {
             // Update the displayed emoji count on the page
             updateEmojiCount(targetType, targetId, emojiType);
