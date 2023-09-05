@@ -1,32 +1,34 @@
 <h1>Update Profile</h1>
-
-<form class="update-profile-form" enctype="multipart/form-data" action="/api/profile/update" method="POST">
+<hr>
+<form class="row surface" enctype="multipart/form-data" action="/api/profile/update" method="POST">
   <!-- Profile Picture: Display current image if it exists -->
-  <label for="profile-picture">Profile Picture</label>
-  <input type="file" id="profile-picture" name="profilePicture" accept="image/*">
-  
-  {{#if profile.image_url}}
+  <div class="flex-column d-flex align-items-center">
+    {{#if profile.image_url}}
     <!-- Display the current profile picture if available -->
-    <img src="{{profile.image_url}}" alt="Current Profile Picture">
-  {{/if}}
+    <img src="{{profile.image_url}}" alt="Current Profile Picture" width="200" height="200" class="pfp">
+    {{/if}}
+    <label for="profile-picture">Profile Picture</label>
+    <input type="file" id="profile-picture" name="profilePicture" accept="image/*" class="form-control-custom">
+  </div>
 
   <!-- Name: Display current name if it exists, otherwise use a placeholder -->
   <label for="name">Name</label>
-  <input type="text" id="name" name="name" value="{{#if profile.name}}{{profile.name}}{{/if}}">
-  
+  <input class="form-textbox" type="text" id="name" name="name" value="{{#if profile.name}}{{profile.name}}{{/if}}">
+
   <!-- Pronouns: Display current pronouns if they exist, otherwise use a placeholder -->
   <label for="pronouns">Pronouns</label>
-  <input type="text" id="pronouns" name="pronouns" value="{{#if profile.pronouns}}{{profile.pronouns}}{{/if}}">
-  
+  <input class="form-textbox" type="text" id="pronouns" name="pronouns"
+    value="{{#if profile.pronouns}}{{profile.pronouns}}{{/if}}">
+
   <!-- Bio: Display current bio if it exists, otherwise use a placeholder -->
   <label for="bio">Bio</label>
-  <textarea id="bio" name="bio">{{#if profile.bio}}{{profile.bio}}{{/if}}</textarea>
-  
+  <textarea class="form-textbox" id="bio" name="bio">{{#if profile.bio}}{{profile.bio}}{{/if}}</textarea>
+
   <!-- Media: Display current media if it exists, otherwise use a placeholder -->
   <label for="media">Media</label>
-  <input type="text" id="media" name="media" value="{{#if profile.media}}{{profile.media}}{{/if}}">
-  
-  <button type="submit">Update Profile</button>
+  <input class="form-textbox" type="text" id="media" name="media" value="{{#if profile.media}}{{profile.media}}{{/if}}">
+
+  <button type="submit" class="custom_button">Update Profile</button>
 </form>
 
 <script src="/js/profile.js"></script>
