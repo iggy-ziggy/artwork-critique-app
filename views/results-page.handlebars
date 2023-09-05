@@ -1,9 +1,26 @@
-{{#each artwork}}
-  <div class="artwork">
-    <h2>{{title}}</h2>
-    <p>Description: {{description}}</p>
-    <p>Media: {{media}}</p>
-    <p>Created by: {{user.name}}</p>
-    <p>Email: {{user.email}}</p>
+{{#each results as |result|}}
+    <div class="row mb-4 project p-2 align-items-center flex-column">
+  <div class="col-md-5 d-flex flex-column align-items-center">
+    <h2 class="header-cen">
+      <p>{{title}}</p>
+    </h2>
+    <a href="/api/artwork/{{artwork_id}}">
+      <img src="{{image_url}}" alt="artwork thumbnail" class="artwork-img">
+    </a>
+
+    <p>Created by <a href="/api/profile/{{user.id}}" class="no-button">{{user.name}}</a>
+    </p>
   </div>
+  <div class="col-md-7 color_bg p-2">
+    <h3 class="header">
+      Description:
+    </h3>
+    <p class="text-center">
+      {{description}}
+    </p>
+  </div>
+  
+</div>
 {{/each}}
+
+<script src="/js/comment.js"></script>

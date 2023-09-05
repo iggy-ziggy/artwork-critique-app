@@ -1,7 +1,8 @@
 const router = require('express').Router();
 const { Artwork , User, Profile } = require('../models');
 const withAuth = require('../utils/auth');
-const { Op } = require('sequelize');
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 router.get('/', async (req, res) => {
   try {
@@ -65,6 +66,35 @@ router.get('/login', (req, res) => {
   }
 
   res.render('login');
+});
+
+router.get('/search/:result', async (req, res) => {
+  try {
+    const title = req.params.result;
+    console.log(title);
+
+    const resultData = await Artwork.findAll({ where: 
+      { 
+        title: { [Op.like]: '%' + title + '%' }
+      },
+      include: [
+        {
+          model: User,
+          attributes: {exclude: ['password']},
+        },
+      ],
+    });
+
+    const results = resultData.map((artwork) => artwork.get({ plain: true }));
+
+    console.log(results);
+
+    res.render('results-page', {results});
+    // console.log(results);
+    // res.status(200).json(results);
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
 module.exports = router;
