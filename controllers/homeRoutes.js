@@ -29,6 +29,34 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.get('/search/:result', async (req, res) => {
+  try {
+    const title = req.params.result;
+    console.log('Search Query:', title);
+
+    const resultData = await Artwork.findAll({ where: 
+      { 
+        title: { [Op.like]: '%' + title + '%' }
+      },
+      include: [
+        {
+          model: User,
+          attributes: {exclude: ['password']},
+        },
+      ],
+    });
+    console.log('Search Results:', resultData);
+    const results = resultData.map((artwork) => artwork.get({ plain: true }));
+
+    console.log(results);
+    res.status(200).json(results);
+    res.render('results-page', { results });
+  } catch (err) {
+    console.error('Error:', err);
+    res.status(500).json(err);
+  }
+});
+
 // login
 router.get('/login', (req, res) => {
   // If the user is already logged in, redirect the request to another route
