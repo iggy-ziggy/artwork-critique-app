@@ -14,7 +14,7 @@
   <div class="d-flex flex-column justify-content-around">
     <header class="d-flex justify-content-between align-items-center p-2">
       <h1>
-        <a href="/"><img src="images/indevlogo.png" alt="logo" height="75" width="150"></a>
+        <a href="/"><img src="/images/indevlogo.png" alt="logo" height="75" width="150"></a>
       </h1>
       <div class="d-flex align-items-center">
         <nav>
@@ -27,7 +27,9 @@
           <a class="no-button" href="/login">login</a>
           {{/if}}
         </nav>
-        <input type="text" class="search-bar" placeholder="Search for users, tags, etc...">
+        <form action="/search/:result" class="search-form" method="get">
+          <input type="text" id="search-bar" placeholder="Search for images by name...">
+        </form>
       </div>
 
     </header>
@@ -40,6 +42,7 @@
   {{#if logged_in}}
   <script src="/js/logout.js"></script>
   {{/if}}
+  <script src="/js/search.js"></script>
   </main>
   <footer>
 
