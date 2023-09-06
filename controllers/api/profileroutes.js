@@ -147,8 +147,9 @@ router.post('/update', withAuth, upload.single('profilePicture'), async (req, re
 
     if (affectedRows > 0) {
       // Return a success response
-      res.render('profile');
-      return res.status(200).json({ message: 'Profile updated successfully', downloadURL: imageUrl });
+      //res.render('profile');
+      return res.redirect('/api/profile');
+      
     } else {
       return res.status(404).json({ message: 'Profile not found' });
     }

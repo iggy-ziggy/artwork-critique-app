@@ -52,7 +52,8 @@ router.post('/upload', withAuth, upload.single('artworkPicture'), async (req, re
 
       console.log('New artwork:', newArtwork);
 
-      res.status(200).json(newArtwork);
+      //res.status(200).json(newArtwork);
+      res.redirect('/api/profile');
     } else {
       res.status(400).json({ message: 'No artwork picture provided' });
     }
