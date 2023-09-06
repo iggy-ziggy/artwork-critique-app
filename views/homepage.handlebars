@@ -25,7 +25,7 @@
     <div class="card-columns">
         {{#each artworks as |artwork| }}
         <a href="/api/artwork/{{artwork_id}}" class="card-container">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541" alt="recently posted artwork" class="img-card">
+            <img src="{{image_url}}" alt="recently posted artwork" class="img-card">
             <div class="card-title">{{title}}</div>
             <div class="card-author">{{user.name}}</div>
         </a>

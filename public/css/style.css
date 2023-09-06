@@ -275,6 +275,7 @@ hr {
 .comment {
   background-color: var(--background_color);
   padding: 1rem;
+  margin-bottom: 5rem;
 }
 
 .follower-container {
