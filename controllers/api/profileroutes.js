@@ -124,7 +124,7 @@ router.post('/update', withAuth, upload.single('profilePicture'), async (req, re
       const newProfile = await Profile.create(newProfileData);
 
       // Return a success response
-      res.render('profile');
+      res.render('/');
       return res.status(200).json({ message: 'Profile created successfully', profile: newProfile, downloadURL: imageUrl });
     }
 
