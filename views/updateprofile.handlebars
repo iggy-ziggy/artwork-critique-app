@@ -1,6 +1,6 @@
 <h1>Update Profile</h1>
 <hr>
-<form class="row surface" enctype="multipart/form-data" action="/api/profile/update" method="POST">
+<form class="row surface" enctype="multipart/form-data" action="/api/profile" method="POST">
   <!-- Profile Picture: Display current image if it exists -->
   <div class="flex-column d-flex align-items-center">
     {{#if profile.image_url}}
@@ -28,7 +28,7 @@
   <label for="media">Media</label>
   <input class="form-textbox" type="text" id="media" name="media" value="{{#if profile.media}}{{profile.media}}{{/if}}">
 
-  <a href="/api/profile"><button type="submit" class="custom_button">Update Profile</button></a>
+  <button type="submit" class="custom_button">Update Profile</button>
 </form>
 
-<script src="/js/profile.js"></script>
+{{!-- <script src="/js/profile.js"></script> --}}

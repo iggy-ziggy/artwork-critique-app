@@ -74,7 +74,7 @@ router.get('/update/new', withAuth, async (req, res) => {
 });
 
 // update profile
-router.post('/update', withAuth, upload.single('profilePicture'), async (req, res) => {
+router.post('/', withAuth, upload.single('profilePicture'), async (req, res) => {
   try {
     console.log('Received Update request');
     const user_id = req.session.user_id;
@@ -143,16 +143,21 @@ router.post('/update', withAuth, upload.single('profilePicture'), async (req, re
       },
     };
 
-    const [affectedRows] = await Profile.update(updatedProfileData, options);
+    // const [affectedRows] = await Profile.update(updatedProfileData, options);
 
-    if (affectedRows > 0) {
-      // Return a success response
-      //res.render('profile');
-      return res.redirect('/api/profile');
+    // if (affectedRows > 0) {
+    //   // Return a success response
+    //   //res.render('profile');
+    //   return res.redirect('/api/profile');
       
-    } else {
-      return res.status(404).json({ message: 'Profile not found' });
-    }
+    // } else {
+    //   return res.status(404).json({ message: 'Profile not found' });
+    // }
+
+    const data = await Profile.update(updatedProfileData, options);
+    // const newData = data.toJSON();
+
+    res.render('profile');
   } catch (err) {
     console.error('Error:', err);
     return res.status(500).json({ message: 'Error updating profile' });
