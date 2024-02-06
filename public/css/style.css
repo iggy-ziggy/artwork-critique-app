@@ -242,6 +242,7 @@ hr {
 
 .pfp {
   border-radius: 6rem;
+  object-fit: cover;
 }
 
 .upload-img {

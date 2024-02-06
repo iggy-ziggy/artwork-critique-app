@@ -4,6 +4,7 @@
     "pronouns": "he/him",
     "bio": "It is good to love many things, for therein lies the true strength, and whosoever loves much performs much, and can accomplish much, and what is done in love is well done.",
     "media": "oil paint",
+    "image_url": "https://images.unsplash.com/photo-1626243048488-f224f98c4784?q=80&w=3387&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     "user_id": 1
   },
   {
@@ -11,6 +12,7 @@
     "pronouns": "he/him",
     "bio": "Sculpture is the art of the hole and the lump.",
     "media": "clay, bronze",
+    "image_url": "https://images.unsplash.com/photo-1705261467088-fec87fd71f1f?q=80&w=3538&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     "user_id": 2
   },
   {
@@ -18,6 +20,7 @@
     "pronouns": "she/her",
     "bio": "To express your emotions, you have to be very loose and receptive. The unconscious will come to you if you have that gift that artists have. I only know if I am inspired by the results.",
     "media": "all",
+    "image_url": "https://media.cnn.com/api/v1/images/stellar/prod/230519125545-01-louise-bourgeois-spider-re-up.jpg?q=w_2000,c_fill/f_webp",
     "user_id": 3
   }
 ]
