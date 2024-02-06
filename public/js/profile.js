@@ -19,7 +19,7 @@ const newFormHandler = async (event) => {
   }
 
   if (formData.has('name') || formData.has('pronouns') || formData.has('bio') || formData.has('media') || formData.has('profilePicture')) {
-    const response = await fetch('/api/profile/update', {
+    const response = await fetch('/api/profile', {
       method: 'POST',
       body: formData, // Use FormData for file upload
     });
@@ -31,5 +31,6 @@ const newFormHandler = async (event) => {
     }
   }
 };
+
 
 document.querySelector('.create-profile-form').addEventListener('submit', newFormHandler);
